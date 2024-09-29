@@ -1,75 +1,73 @@
-import React, { Component } from 'react'
-import {connect} from 'react-redux';
-class Modal extends Component {
-  render() {
-    return (
-        <div className = 'row container mx-auto'>
-            {this.renderShoe()}
-        </div>
-    )
-   
-  }
-  renderShoe = () => {
-    const {cart} = this.props;
-    return (
-        cart.map((product,index) => {
-            return (
-       /*  <div className = 'col-3' key = {index}>
-            <div>name: {product.name}</div>
-            <div>alias: {product.alias}</div>
-            <div>price</div>
-            <div>description</div>
-            <div>shortDescription</div>
-            <div>quantity</div>
-            <div><img src = {product.image}></img></div>
-        </div> */
-          /*   <div className="card col-4" style={{width: '18rem'}}>
-                <img src={product.image}className="card-img-top" alt="..." />
-                <div className="card-body">
-                    <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">{product.shortDescription}</p>
-                    <a href="#" className="btn btn-success">Add to cart</a>
+import React, { useState } from 'react';
+import swal from 'sweetalert';
+
+export default function Modal({ state, addToCart }) {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (type) => {
+    if (type === 'increment') {
+      setQuantity(prevQuantity => prevQuantity + 1);
+    } else if (type === 'decrement' && quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
+
+ const showOption = () => {
+  swal({
+    title: "Are you sure to buy this product?",
+    text: "Once confirmed, this product will be added to your cart!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willAdd) => {
+    if (willAdd) {
+      addToCart({ ...state, quantity }); // Sử dụng quantity từ modal
+      swal("Product added to your cart", {
+        icon: "success",
+      });
+    } else {
+      swal("See you again later");
+    }
+  });
+};
+
+  if (!state) return null;
+
+  return (
+    <div className="modal fade" id="productModal" tabIndex={-1} aria-labelledby="productModalLabel" aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="productModalLabel">{state.name}</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+          <div className="modal-body">
+            <div className="row">
+              <div className="col-md-5">
+                <img src={state.image} alt="Product" className="img-fluid" />
+              </div>
+              <div className="col-md-7">
+                <h4>{state.name}</h4>
+                <p>{state.shortDescription}</p>
+                <div className="d-flex align-items-center">
+                  <span>Số lượng:</span>
+                  <div className="input-group ms-3" style={{ width: 120 }}>
+                    <button className="btn btn-outline-secondary" type="button" onClick={() => handleQuantityChange('decrement')}>-</button>
+                    <input type="text" className="form-control text-center" value={quantity} readOnly />
+                    <button className="btn btn-outline-secondary" type="button" onClick={() => handleQuantityChange('increment')}>+</button>
+                  </div>
                 </div>
-            </div> */
-            <div className="col-md-4 mb-3">
-            <div className="card">
-              <img 
-                src={product.image}
-                className="card-img-top" 
-                alt={product.alias} 
-              />
-              <div className="card-body">
-                <h5 className="card-title">{product.name}</h5>
-                <p className="card-text">
-                  {product.shortDescription}
-                </p>
-                <p className="card-text text-danger">
-                  Quantity: <strong>{product.quantity}</strong>
-                </p>
-                <p className="card-text text-success">
-                  Price: <strong>{product.price}</strong>
-                </p>
-                <button 
-                  type="button" 
-                  className="btn btn-primary" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#productModal"
-                >
-                  Add to Cart
-                </button>
+                <div>Tổng giá: <strong>{(state.price * quantity).toFixed(2)}$</strong></div>
               </div>
             </div>
           </div>
-
-            )
-        })
-      
-    )
-  }
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" className="btn btn-primary" onClick={showOption}>Thêm vào giỏ hàng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
-const mapStatetoProps = (state) => {
-    return {
-        cart: state.CartReducer.cart
-    }
-}
-export default connect(mapStatetoProps, null)(Modal)

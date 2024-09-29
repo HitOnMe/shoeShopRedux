@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Navigation extends Component {
-  render() {
+export default function Navigation(props){
+ 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div className="container">
@@ -29,15 +29,16 @@ export default class Navigation extends Component {
           <a className="nav-link" href="#">Contact</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-shopping-cart me-2">
-              <circle cx={9} cy={21} r={1} />
-              <circle cx={20} cy={21} r={1} />
-              <path d="M2 2h3l1 4h12l1-4h4" />
-              <path d="M6 6h15l3 11H6" />
-            </svg>
-            Your Cart
-          </a>
+        <a className="nav-link d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" id='exampleModal'>
+  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-shopping-cart me-2">
+    <circle cx={9} cy={21} r={1} />
+    <circle cx={20} cy={21} r={1} />
+    <path d="M2 2h3l1 4h12l1-4h4" />
+    <path d="M6 6h15l3 11H6" />
+  </svg>
+  Your Cart
+</a>
+
         </li>
       </ul>
     </div>
@@ -45,5 +46,4 @@ export default class Navigation extends Component {
 </nav>
 
     )
-  }
 }
